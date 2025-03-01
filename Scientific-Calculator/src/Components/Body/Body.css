@@ -1,0 +1,139 @@
+/* Default Dark Mode (Same as Before) */
+.calculator {
+    width: 380px;
+    margin: 40px auto;
+    padding: 20px;
+    background: #1e1e1e; /* Default dark mode background */
+    border-radius: 15px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    transition: background 0.3s ease-in-out;
+}
+
+/* Light Mode */
+.light-mode .calculator {
+    background: #ffffff; /* White background for light mode */
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Display Container */
+.display-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    background: #121212;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    position: relative;
+    transition: background 0.3s ease-in-out;
+}
+
+.light-mode .display-container {
+    background: #f1f3f4; /* Light gray display */
+}
+
+/* Display Input */
+.display {
+    flex: 1;
+    height: 50px;
+    background: transparent;
+    color: white;
+    font-size: 20px;
+    border: none;
+    outline: none;
+    text-align: right;
+    padding-right: 10px;
+    transition: color 0.3s ease-in-out;
+}
+
+.light-mode .display {
+    color: black; /* Dark text in light mode */
+}
+
+/* Buttons Grid */
+.buttons-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 8px;
+}
+
+/* Button Styles */
+button {
+    height: 50px;
+    font-size: 18px;
+    color: white;
+    background: #2c2c2c;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out, background 0.3s ease-in-out;
+}
+
+button:hover {
+    background: #3a3a3a;
+}
+
+/* Light Mode Buttons */
+.light-mode button {
+    color: black;
+    background: #dee2e6;
+}
+
+.light-mode button:hover {
+    background: #ced4da;
+}
+
+/* Special Buttons */
+.red-btn {
+    background: #d9534f;
+}
+
+.red-btn:hover {
+    background: #c9302c;
+}
+
+.blue-btn {
+    background: #5b87f5;
+}
+
+.blue-btn:hover {
+    background: #3d6be8;
+}
+
+/* Light Mode Special Buttons */
+.light-mode .red-btn {
+    background: #ff6b6b;
+}
+
+.light-mode .blue-btn {
+    background: #4c86ff;
+}
+
+/* Space Between "Rad" & "Deg" */
+.space {
+    width: 12px;
+}
+
+@media (max-width: 480px) {
+    .calculator {
+        width: 90%;
+        padding: 15px;
+    }
+
+    .display {
+        font-size: 18px;
+        height: 45px;
+    }
+
+    .buttons-grid {
+        grid-template-columns: repeat(7, 1fr); /* Keep 7-column layout */
+        grid-template-rows: repeat(5, auto);  /* Keep 5-row layout */
+        gap: 5px; /* Reduce gap for smaller screens */
+    }
+
+    button {
+        height: 40px;  /* Slightly smaller buttons */
+        font-size: 16px;
+        border-radius: 20px;
+    }
+}

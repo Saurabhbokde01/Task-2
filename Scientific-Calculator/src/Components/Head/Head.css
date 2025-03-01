@@ -1,0 +1,229 @@
+:root {
+  --bg-light: #f8f9fa;
+  --text-light: #000;
+  --bg-dark: #101835;
+  --text-dark: #fff;
+  --toggle-bg: #ddd;
+  --toggle-slider-color: #fff;
+  --active-sun: #FFD700; /* Yellow for sun */
+  --active-moon: #ADD8E6; /* Light blue for moon */
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  background-color: var(--bg-light);
+  color: var(--text-light);
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+body.dark-mode {
+  background-color: var(--bg-dark);
+  color: var(--text-dark);
+}
+
+/* Header */
+.head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  background: inherit;
+  border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+}
+
+/* Theme Toggle Container (Pill-Shaped) */
+.theme-toggle {
+  width: 80px;
+  height: 40px;
+  background: var(--toggle-bg);
+  border-radius: 20px;
+  position: relative;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+/* Slider for Active Effect */
+.toggle-slider {
+  position: absolute;
+  width: 36px;
+  height: 36px;
+  background: var(--toggle-slider-color);
+  border-radius: 50%;
+  top: 2px;
+  left: 2px;
+  transition: transform 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+/* Slide the toggle-slider to the right when dark mode is active */
+.theme-toggle.active .toggle-slider {
+  transform: translateX(40px);
+}
+
+/* Positioning and styling for icons */
+.icon {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 18px;
+  z-index: 2;
+  transition: color 0.3s ease;
+}
+
+.icon.sun {
+  left: 11px;
+  color: var(--active-sun);
+}
+
+.icon.moon {
+  right: 13px;
+  color: var(--active-moon);
+}
+
+
+/* 🔹 RESPONSIVE DESIGN 🔹 */
+@media (max-width: 768px) {
+  .head {
+    padding: 10px 15px;
+  }
+
+  .head h1 {
+    font-size: 25px; /* Adjust heading size for smaller screens */
+  }
+
+  .theme-toggle {
+    width: 70px;
+    height: 35px;
+  }
+
+  .toggle-slider {
+    width: 30px;
+    height: 30px;
+    top: 2.5px;
+    left: 2px;
+  }
+
+  .theme-toggle.active .toggle-slider {
+    transform: translateX(35px);
+  }
+
+  .icon {
+    font-size: 16px; /* Reduce icon size for smaller screens */
+  }
+
+  .icon.sun {
+    left: 9px;
+  }
+
+  .icon.moon {
+    right: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .head {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .head h1 {
+    font-size: 20px; /* Even smaller for very small screens */
+    margin-bottom: 10px;
+  }
+
+  .theme-toggle {
+    width: 60px;
+    height: 30px;
+  }
+
+  .toggle-slider {
+    width: 26px;
+    height: 26px;
+    top: 2px;
+    left: 2px;
+  }
+
+  .theme-toggle.active .toggle-slider {
+    transform: translateX(30px);
+  }
+
+  .icon {
+    font-size: 14px;
+  }
+
+  .icon.sun {
+    left: 7px;
+  }
+
+  .icon.moon {
+    right: 8px;
+  }
+}
+@media (max-width: 488px) {
+  .head {
+    display: flex;
+    flex-direction: row;  /* Keep items in a row */
+    justify-content: space-between;  /* Keep heading on left, icons on right */
+    align-items: center;
+    padding: 10px 15px;
+  }
+
+  .head-left {
+    flex-grow: 1; /* Ensures it takes up available space */
+    text-align: left; /* Keep heading aligned to the left */
+  }
+
+  .head h2 {
+    font-size: 18px; /* Adjust size for smaller screens */
+    margin: 0; /* Remove unwanted margins */
+  }
+
+  .head-right {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Space between icons */
+  }
+
+  .theme-toggle {
+    width: 60px;
+    height: 30px;
+    position: relative;
+  }
+
+  .toggle-slider {
+    width: 26px;
+    height: 26px;
+    top: 2px;
+    left: 2px;
+  }
+
+  .theme-toggle.active .toggle-slider {
+    transform: translateX(30px);
+  }
+
+  .icon {
+    font-size: 14px;
+  }
+
+  .icon.sun {
+    left: 7px;
+  }
+
+  .icon.moon {
+    right: 8px;
+  }
+
+  /* Prevent layout shifting */
+  .container {
+    padding: 10px;
+  }
+
+  /* Ensure images are responsive */
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+}
