@@ -1,14 +1,27 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import "./Body.css";
 
 const Body = () => {
   const [input, setInput] = useState("");
   const [answer, setAnswer] = useState(""); // Stores last calculated answer
   const [isDegree, setIsDegree] = useState(true); // Tracks Rad/Deg mode
+  const [isInverse, setIsInverse] = useState(false); // Tracks Inv mode
+  const inputRef = useRef(null);
+
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.scrollLeft = inputRef.current.scrollWidth;
+    }
+  }, [input]);
 
   // Function to handle numbers & operators
   const handleClick = (value) => {
-    setInput((prev) => prev + value);
+    setInput((prev) => {
+      if (prev && /\d$/.test(prev) && /^[a-z(]/i.test(value)) {
+        return prev + "*" + value;
+      }
+      return prev + value;
+    });
   };
 
   // Function to clear input
@@ -31,30 +44,43 @@ const Body = () => {
   // Function to evaluate math expressions
   const evaluateExpression = (exp) => {
     try {
-      // Replace function names with valid JS Math functions
       let formattedExp = exp
-        .replace(/sin/g, "Math.sin")
-        .replace(/cos/g, "Math.cos")
-        .replace(/tan/g, "Math.tan")
-        .replace(/log/g, "Math.log10")
-        .replace(/ln/g, "Math.log")
-        .replace(/√/g, "Math.sqrt")
         .replace(/π/g, "Math.PI")
         .replace(/e/g, "Math.E")
-        .replace(/EXP/g, "Math.exp")
-        .replace(/arcsin/g, "Math.asin")
-        .replace(/arccos/g, "Math.acos")
-        .replace(/arctan/g, "Math.atan");
+        .replace(/EXP\(/g, "Math.exp(")
+        .replace(/√\(/g, "Math.sqrt(")
+        .replace(/log\(/g, "Math.log10(")
+        .replace(/ln\(/g, "Math.log(")
+        .replace(/(\d+)\^(\d+)/g, "Math.pow($1,$2)");
 
-      // Convert degrees to radians if needed
-      formattedExp = formattedExp.replace(/Math\.(sin|cos|tan|asin|acos|atan)\(([^)]+)\)/g, (match, func, num) => {
-        return `Math.${func}(${isDegree ? `(${num} * Math.PI / 180)` : num})`;
-      });
+      formattedExp = formattedExp.replace(
+        /(sin|cos|tan)\(([^)]+)\)/g,
+        (match, func, num) =>
+          `Math.${func}(${isDegree ? `(${num} * Math.PI / 180)` : num})`
+      );
 
-      // Handle factorials (x!)
-      formattedExp = formattedExp.replace(/(\d+)!/g, (match, num) => factorial(parseInt(num)));
+      formattedExp = formattedExp.replace(
+        /(arcsin|arccos|arctan)\(([^)]+)\)/g,
+        (match, func, num) => {
+          const trigFunc = {
+            arcsin: "asin",
+            arccos: "acos",
+            arctan: "atan",
+          }[func];
+          return isDegree
+            ? `(Math.${trigFunc}(${num}) * 180 / Math.PI)`
+            : `Math.${trigFunc}(${num})`;
+        }
+      );
 
-      // Evaluate the formatted expression safely
+      formattedExp = formattedExp.replace(/(\d+)!/g, (match, num) =>
+        factorial(parseInt(num))
+      );
+
+      if (answer) {
+        formattedExp = formattedExp.replace(/Ans/g, answer);
+      }
+
       let result = new Function(`return ${formattedExp}`)();
       setInput(result.toString());
       setAnswer(result.toString());
@@ -67,20 +93,20 @@ const Body = () => {
     <div className="calculator">
       {/* Display */}
       <div className="display-container">
-        <input type="text" className="display" value={input} readOnly />
+        <input ref={inputRef} type="text" className="display" value={input} readOnly />
       </div>
 
       {/* Buttons */}
       <div className="buttons-grid">
         <button onClick={() => setIsDegree(true)}>Deg</button>
         <button onClick={() => setIsDegree(false)}>Rad</button>
-        <button onClick={() => handleClick("!")} >x!</button>
-        <button onClick={() => handleClick("(")}>(</button>
+        <button onClick={() => handleClick("!")}>x!</button>
+        <button onClick={() => handleClick("(")}> (</button>
         <button onClick={() => handleClick(")")}>)</button>
         <button className="red-btn" onClick={handleDelete}>DEL</button>
         <button className="red-btn" onClick={handleClear}>AC</button>
 
-        <button onClick={() => handleClick("arcsin(")}>arcsin</button>
+        <button onClick={() => handleClick("log(")}>log</button>
         <button onClick={() => handleClick("sin(")}>sin</button>
         <button onClick={() => handleClick("ln(")}>ln</button>
         <button onClick={() => handleClick("7")}>7</button>
@@ -89,7 +115,7 @@ const Body = () => {
         <button onClick={() => handleClick("/")}>÷</button>
 
         <button onClick={() => handleClick("π")}>π</button>
-        <button onClick={() => handleClick("arccos(")}>arccos</button>
+        <button onClick={() => setIsInverse(!isInverse)}>Inv</button>
         <button onClick={() => handleClick("cos(")}>cos</button>
         <button onClick={() => handleClick("4")}>4</button>
         <button onClick={() => handleClick("5")}>5</button>
@@ -97,7 +123,7 @@ const Body = () => {
         <button onClick={() => handleClick("*")}>×</button>
 
         <button onClick={() => handleClick("e")}>e</button>
-        <button onClick={() => handleClick("arctan(")}>arctan</button>
+        <button onClick={() => handleClick("^")}>xʸ</button>
         <button onClick={() => handleClick("tan(")}>tan</button>
         <button onClick={() => handleClick("1")}>1</button>
         <button onClick={() => handleClick("2")}>2</button>
